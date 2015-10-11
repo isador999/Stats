@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <!-- Head -->
+  {% include 'head.html' %}
+
+  <body>
+    <!-- Navbar -->
+    {% with "Dynamic Packages Stats" as namepage  %}
+        {% include 'navbar.html' %}
+    {% endwith %}
+    
+    <!-- <p class=""><font size="15" color="lightgrey">  Packages Statistics  </font></p> -->
+    <br>
+    <div class="container">
+        <fieldset class="scheduler-border">
+         <legend class="scheduler-border"> Statistics </legend>
+	  <center>
+	    {% load chartit %}
+	    {% block scripts %}
+	    <div id="container">{{ chtpject |load_charts:"container" }}</div>
+	    {% endblock %}
+	  </center>
+        </fieldset>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <div class="container">
+	<fieldset class="scheduler-border">
+	 <legend class="scheduler-border"> Packaging History </legend>
+	  <table class="table">
+	    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for package in listpackages %}
+                        <tr>
+                            <th>
+                                {{ package.name }}
+                            </th>
+                            <th>
+                                {{ package.extension }}
+                            </th>
+
+                            <th>
+                            </th>	
+                            <th>
+                            </th>
+                        </tr>
+                    {% empty %}
+                    <p>No packages yet. </p>
+                    {% endfor %}
+                </tbody>
+	  </table>
+    </div>
+    
+  </body>
+</html>

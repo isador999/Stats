@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    {% include 'head.html' %}
+  <body>
+    <!-- Navbar -->
+    {% with "Add a new Project" as namepage  %}
+        {% include 'navbar.html' %}
+    {% endwith %}
+    
+    <div class="container">
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">New Project</legend>
+
+          {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for field in form %}
+                    {% if field.errors %}
+                    <li><strong>{{ field.label }}:</strong> {{ field.errors|striptags }}</li>
+                    {% endif %}
+                {% endfor %}
+            </div>
+           {% endif %}
+
+	    <form class="form-horizontal" action="{% url 'webgui.views.addproject' %}" method="post">{% csrf_token %}
+            <!-- <form class="form-horizontal" role="form"> -->
+	   {% for field in form %}
+                <div class="form-group {% if field.errors %}has-error{% endif %}">
+                    <label for="{{field.name}}">
+                        {{ field.label }}
+                    </label>
+                    <div class="col-sm-4">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+
+
+            </form>
+	</fieldset>
+                
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-1">
+                    <button onclick="goAddAlarmClock()" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+	<br>
+	<br> 
+	<br> 
+	<br> 
+	<fieldset>
+            <!-- Display projects -->
+            <legend class="scheduler-border">Projects List</legend>
+                <div class="form-group">
+                    <!-- <label for="time" class="col-sm-2 control-label"></label> -->
+                    <div class="col-sm-4">
+                        {% for project in listradio %}
+                            <option value="{{project.id}}">{{project.name }}</option>
+                        {% endfor %} 
+                    </div>
+                    
+                </div>
+
+                <!-- Automatic put off -->
+<!--                <div class="form-group">
+                    <label for="time" class="col-sm-2 control-label">Auto stop</label> 
+                    <div class="col-sm-1">
+                       <select id="snooze" class="form-control">
+                            {% for i in rangeSnooze %}
+                                <option value="{{ i }}">
+                                    {% if i < 10 %}
+                                        0{{i}}
+                                    {% else %}
+                                        {{i}}
+                                    {% endif %} 
+                                </option>
+                            {% endfor %}
+                       </select>
+                    </div>
+                </div>    -->
+ 
+            
+        </fieldset > 
+           
+    </div>
+    
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <!-- Head -->
   {% include 'head.html' %}
   <!-- clock js -->
-  <script src="{{ STATIC_URL }}clock.js"></script>
+  <!-- <script src="{{ STATIC_URL }}clock.js"></script> -->
   <body>
     <!-- Navbar -->
     {% with "Home" as namepage  %}
@@ -12,68 +12,98 @@
     
     <div class="container">
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border"><a href="{% url 'webgui.views.homepage' %}" style="margin-bottom: 3px" type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-refresh"></span></a>  Rpi date and time</legend>
-            <div style="text-align: center">
+            <!-- <legend class="scheduler-border"><a href="{% url 'webgui.views.homepage' %}" style="margin-bottom: 3px" type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-refresh"></span></a> Date </legend>  -->
+
+<!--             <div style="text-align: center">
                 <strong class="text-primary"><div id="clock">{{ clock }}</div></strong>
+            </div>   -->
+	    <div style="text-align: left">
+                <strong class="text-primary"><div id="clock"> <img src="{{STATIC_URL}}dist/img/NCIS.png" height="130" width="130"> {{ date }} </div></strong>
             </div>
+
         </fieldset>
         </br>
+    </div> 
+
+    <div class="container">
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border"><a href="{% url 'webgui.views.alarmclock' %}" style="margin-bottom: 3px" type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-cog"></span></a>  Alarm clock</legend>
-            <table class="table">
-                <thead>
+            <legend class="scheduler-border"><a href="{% url 'webgui.views.addproject' %}" style="margin-bottom: 3px" type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span></a> Active Projects </legend>
+          <table class="table">
+            <thead>
                     <tr>
-                        <th>Label</th>
-                        <th>Day of week</th>
-                        <th>Time</th>
+                        <strong><th> Project </th></strong>
+                        <strong><th> Company </th></strong>
+                        <strong><th> Created at </th></strong>
+                        <strong><th> Packages Count</th></strong>
+                        <strong><th> Delete Project </th></strong>
                     </tr>
                 </thead>
+                    {% for project in listprojects %}
                 <tbody>
-                    {% for alarmclock in listalarmclock %}
-                        {% if alarmclock.active == True %}
-                            <tr>
-                                <th>
-                                    {{alarmclock.label}}
-                                </th>
-                                <th>
-                                    <div class="col-xs-1"><span class="text-{% if "1" in alarmclock.period  %}primary{% else %}muted{% endif %}">Mo</span></div>                      
-                                    <div class="col-xs-1"><span class="text-{% if "2" in alarmclock.period  %}primary{% else %}muted{% endif %}">Tu</span></div>
-                                    <div class="col-xs-1"><span class="text-{% if "3" in alarmclock.period  %}primary{% else %}muted{% endif %}">We</span></div>
-                                    <div class="col-xs-1"><span class="text-{% if "4" in alarmclock.period  %}primary{% else %}muted{% endif %}">Th</span></div>
-                                    <div class="col-xs-1"><span class="text-{% if "5" in alarmclock.period  %}primary{% else %}muted{% endif %}">Fr</span></div>
-                                    <div class="col-xs-1"><span class="text-{% if "6" in alarmclock.period  %}primary{% else %}muted{% endif %}">Sa</span></div>
-                                    <div class="col-xs-1"><span class="text-{% if "0" in alarmclock.period  %}primary{% else %}muted{% endif %}">Su</span></div>
-                                 </th>
-                                <th>
-                                {% if alarmclock.hour < 10 %}
-                                    0{{alarmclock.hour}}
+                        <tr>
+                            <th>
+                                {{ project.name }}
+                            </th>
+                            <th>
+				{% if project.company %}
+                                	{{ project.company }}
 				{% else %}
-					{{alarmclock.hour}}
-                                {% endif %}
-                                :
-                                {% if alarmclock.minute < 10 %}
-                                    0{{alarmclock.minute}}
-				{% else %}
-					{{alarmclock.minute}}
-                                {% endif %}
-                                </th>
-                            </tr>
-                          {% endif %}  
-                     {% endfor %}
+					<i> Company not specified</i>. 
+				{% endif %}
+				
+                            </th>
+                            <th>
+                               {{ project.creation_date }} 
+                            </th>
+                            <th>
+                               <a href="{% url 'webgui.views.listpackages' project.id %}"style="margin-bottom: 3px" type="button" class="btn btn-primary btn-sm">
+			                                          <span class="glyphicon glyphicon-briefcase"></span>
+				</a>
+				&nbsp &nbsp {{ project.packages_set.count }}
+                            </th>
+                            <th>
+                               <a href="{% url 'webgui.views.delproject' project.id %}"style="margin-bottom: 3px" type="button" class="btn btn-danger btn-sm">
+                                   <span class="glyphicon glyphicon-trash"></span>
+                               </a>
+                            </th>
+                        </tr>
                 </tbody>
-            </table>
-        </fieldset>
-      
+                    {% empty %}
+                    <p> <i>No projects yet. </i></p>
+                    {% endfor %}
+          </table>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="container">
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border"><a href="{% url 'webgui.views.webradio' %}" style="margin-bottom: 3px" type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-cog"></span></a>  Web radio </legend>
-            <p style="text-align: center;"class="lead {% if player.status == True %}text-primary{% endif %}">{{radio.name}}</p>
-            {% if radio != None  %}
-                <div class="btn-group btn-group-justified" style="margin-bottom: 20px">
-                    <a href="{% url 'webgui.views.play' radio.id %}" id="play" class="btn btn-{% if player.status == True %}primary{% else %}default{% endif %} btn-lg">Play</a>
-                    <a href="{% url 'webgui.views.stop'  %}" id="stop" class="btn btn-{% if player.status == False %}primary{% else %}default{% endif %} btn-lg">Stop</a>
-                </div>
-            {% endif %}  
-        </fieldset>    
+            <legend class="scheduler-border"><a href="{% url 'webgui.views.displaystats' %}" style="margin-bottom: 3px" type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-stats"></span></a> Statistics / Last Package </legend>
+          <table class="table">
+            <thead>
+                    <tr>
+                        <strong><th> Package </th></strong>
+                        <strong><th> Type </th></strong>
+                    </tr>
+                </thead>
+                    {% for package in lastpackages %}
+                <tbody>
+                        <tr>
+                            <th>
+                                {{ package.name }}
+                            </th>
+                            <th>
+				{{ package.extension }}
+                            </th>
+                        </tr>
+                </tbody>
+                    {% empty %}
+                    <p><i>No history yet. </i></p>
+                    {% endfor %}
+          </table>
     </div>
     
   </body>

@@ -19,7 +19,8 @@
                         <th>Label</th>
                         <th>Day of week</th>
                         <th>Time</th>
-                        <th>Web radio</th>
+                        <th>Mode</th>
+                        <th>Play</th>
                         <th>Edit</th>
                         <th>Active</th>
                         <th>Delete</th>
@@ -56,8 +57,17 @@
                                 
                             </th>
                             <th>
-                                {{alarmclock.webradio.name}}
+                                <!-- {{alarmclock.webradio.name}}  -->
+                                {{alarmclock.mode}}
                             </th>
+			    <th>
+                            {% if alarmclock.mode == "music" %}
+                                Random Choice :)
+                            {% else %}
+                                {{alarmclock.webradio.name}}
+                            {% endif %}
+                            </th>
+
                             <th>
                                <a href="{% url 'webgui.views.update_alarmclock' alarmclock.id %}" style="margin-bottom: 3px" type="button" class="btn btn-default btn-sm">
                                     <span class="glyphicon glyphicon-edit"></span>

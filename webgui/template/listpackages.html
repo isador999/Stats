@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <!-- Head -->
+  {% include 'head.html' %}
+
+  <body>
+    <!-- Navbar -->
+    {% with "Packaging History" as namepage  %}
+        {% include 'navbar.html' %}
+    {% endwith %}
+    
+    <!-- <p class=""><font size="15" color="lightgrey">  Packages Statistics  </font></p> -->
+    <br>
+
+    <div class="container">
+	<fieldset class="scheduler-border">
+	 <legend class="scheduler-border"> Packaging History for {{ project.name }} project</legend>
+	  <table class="table">
+	    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Generation Date</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for package in listpkgs %}
+                        <tr>
+                            <th>
+                                {{ package.name }}
+                            </th>
+                            <th>
+                                {{ package.extension }}
+                            </th>
+                            <th>
+			        {{ package.gen_date }}
+                            </th>	
+                        </tr>
+                    {% empty %}
+                    <i>No packages yet. </i>
+                    {% endfor %}
+                </tbody>
+	  </table>
+    </div>
+    
+  </body>
+</html>
